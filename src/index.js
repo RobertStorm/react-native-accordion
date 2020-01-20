@@ -1,6 +1,8 @@
 'use strict';
 
-import React, { PropTypes } from 'react';
+import React from 'react';
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types';
 import tweenState from 'react-tween-state';
 
 import {
@@ -10,19 +12,19 @@ import {
   Text
 } from 'react-native';
 
-var Accordion = React.createClass({
+var Accordion = createReactClass({
   mixins: [tweenState.Mixin],
 
   propTypes: {
-    activeOpacity: React.PropTypes.number,
-    animationDuration: React.PropTypes.number,
-    content: React.PropTypes.element.isRequired,
-    easing: React.PropTypes.string,
-    expanded: React.PropTypes.bool,
-    header: React.PropTypes.element.isRequired,
-    onPress: React.PropTypes.func,
-    underlayColor: React.PropTypes.string,
-    style: React.PropTypes.object
+    activeOpacity: PropTypes.number,
+    animationDuration: PropTypes.number,
+    content: PropTypes.element.isRequired,
+    easing: PropTypes.string,
+    expanded: PropTypes.bool,
+    header: PropTypes.element.isRequired,
+    onPress: PropTypes.func,
+    underlayColor: PropTypes.string,
+    style: PropTypes.object
   },
 
   getDefaultProps() {
@@ -90,6 +92,21 @@ var Accordion = React.createClass({
   },
 
   render() {
+  	var columns = []
+
+  	for(let i = 0; i < this.props.content.length; i = i + 2){
+  		columns.push(
+			<View style={{marginLeft: 10, marginBottom: 3}}>
+				<Text style={{fontWeight: "bold", }}>
+					{this.props.content[i]}
+				</Text>
+				<Text style={{marginLeft: 20}}>
+					{this.props.content[i+1]}
+				</Text>
+			</View>
+		)
+  	}
+
     return (
       /*jshint ignore:start */
       <View
@@ -103,16 +120,16 @@ var Accordion = React.createClass({
           underlayColor={this.props.underlayColor}
           style={this.props.style}
         >
-          {this.props.header}
+          <Text style={{fontWeight: "bold", fontSize: 20, padding: 5,backgroundColor: '#dde2eb', marginTop: 2}}> {this.props.header}</Text>
         </TouchableHighlight>
         <View
           ref="AccordionContentWrapper"
           style={{
-            height: this.getTweeningValue('height')
+            height: this.state.height
           }}
         >
           <View ref="AccordionContent">
-            {this.props.content}
+            {columns}
           </View>
         </View>
       </View>
